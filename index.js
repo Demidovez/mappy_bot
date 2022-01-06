@@ -4,7 +4,7 @@ import express from "express";
 
 dotenv.config();
 
-const bot = new Telegraf(process.env.BOT_TOKEN); //сюда помещается токен, который дал botFather
+const bot = new Telegraf(process.env.BOT_TOKEN);
 
 const app = express();
 const host = "0.0.0.0";
@@ -19,10 +19,14 @@ app.post("/add_problem", (req, res) => {
 
   const problem = req.body;
 
-  bot.telegram.sendMessage(
-    process.env.ADMIN_TELEGRAM_ID,
-    `Новая проблема!\n\nОт: ${problem.user}\nПроблема: ${problem.problem}`
-  );
+  try {
+    bot.telegram.sendMessage(
+      process.env.ADMIN_TELEGRAM_ID,
+      `Новая проблема!\n\nОт: ${problem.user}\nПроблема: ${problem.problem}`
+    );
+  } catch (e) {
+    console.log("ERROR BOT: " + e);
+  }
 
   console.log(problem);
 });
